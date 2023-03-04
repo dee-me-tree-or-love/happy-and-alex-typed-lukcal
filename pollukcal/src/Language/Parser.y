@@ -29,13 +29,13 @@ TH      : text          { LAST.STypeHint $1 }
 
 Exp     : Op Exp Exp    { LAST.SBinExpression $1 $2 $3 }
         | Op Exp        { LAST.SUnExpression $1 $2 }
+        | '(' Exp ')'   { LAST.SExpressionContainer $2 }
         | Term          { LAST.STerm $1 }
 
 Op      : op            { LAST.SOperator $1 }
 
 Term    : number        { LAST.SNumber $1 }
         | text          { LAST.SText $1 }
-        | '(' Exp ')'   { LAST.SExpressionContainer $2 }
 
 {
 parseError :: [LT.Token] -> a

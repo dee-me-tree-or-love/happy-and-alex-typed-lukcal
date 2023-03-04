@@ -21,15 +21,16 @@ eval (LAST.SUntypedExpression x) = compute x
 compute :: LAST.Expression -> EvalOutput
 -- leaf
 compute (LAST.STerm t)                = get t
+-- wrapped expression
+compute (LAST.SExpressionContainer e) = compute e
 -- unary expression
 compute (LAST.SUnExpression o e)      = sApply o $ compute e
 -- binary expression
 compute (LAST.SBinExpression o e1 e2) = bApply o (compute e1) (compute e2)
 
 get :: LAST.Term -> EvalOutput
-get (LAST.SNumber n)              = Right $ NumberResult n
-get (LAST.SText t)                = Right $ TextResult t
-get (LAST.SExpressionContainer e) = compute e
+get (LAST.SNumber n) = Right $ NumberResult n
+get (LAST.SText t)   = Right $ TextResult t
 
 sApply :: LAST.Operator -> EvalOutput -> EvalOutput
 sApply (LAST.SOperator '+') v = v

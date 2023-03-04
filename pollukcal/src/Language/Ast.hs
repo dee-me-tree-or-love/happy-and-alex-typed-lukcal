@@ -19,6 +19,7 @@ newtype TypeHint
 data Expression
   = SBinExpression Operator Expression Expression
   | SUnExpression Operator Expression
+  | SExpressionContainer Expression
   | STerm Term
   deriving (Eq, Show)
 
@@ -29,5 +30,4 @@ newtype Operator
 data Term
   = SNumber Int
   | SText String
-  | SExpressionContainer Expression
   deriving (Eq, Show)

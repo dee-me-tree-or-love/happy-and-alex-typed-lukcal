@@ -27,11 +27,11 @@ annotate (LAST.SUntypedExpression x) = LAST.STypedExpression t x
 annotate x = x
 
 infer :: LAST.Expression -> LAST.TypeHint
-infer (LAST.STerm (LAST.SText _))                = textTypeHint
-infer (LAST.STerm (LAST.SNumber _))              = numberTypeHint
-infer (LAST.STerm (LAST.SExpressionContainer e)) = infer e
-infer (LAST.SUnExpression _ e)                   = infer e
-infer (LAST.SBinExpression o e1 e2)              = solve o (infer e1) (infer e2)
+infer (LAST.STerm (LAST.SText _))   = textTypeHint
+infer (LAST.STerm (LAST.SNumber _)) = numberTypeHint
+infer (LAST.SExpressionContainer e) = infer e
+infer (LAST.SUnExpression _ e)      = infer e
+infer (LAST.SBinExpression o e1 e2) = solve o (infer e1) (infer e2)
 
 -- TODO: wrap it in Maybe's
 solve :: LAST.Operator -> LAST.TypeHint -> LAST.TypeHint -> LAST.TypeHint
