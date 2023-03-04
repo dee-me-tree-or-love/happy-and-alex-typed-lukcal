@@ -22,20 +22,20 @@ import qualified Language.Lexer as LL
 -- Grammar rules
 %%
 
-TExp    : thi TH Exp    { LAST.STypedExpression $2 $3 }
-        | Exp           { LAST.SUntypedExpression $1 }
+TExp    : thi TH TExp    { LAST.STypedExpression $2 $3 }
+        | '(' TExp ')'   { LAST.STypedExpressionContainer $2 }
+        | Exp            { LAST.SUntypedExpression $1 }
 
-TH      : text          { LAST.STypeHint $1 }
+TH      : text           { LAST.STypeHint $1 }
 
-Exp     : Op Exp Exp    { LAST.SBinExpression $1 $2 $3 }
-        | Op Exp        { LAST.SUnExpression $1 $2 }
-        | '(' Exp ')'   { LAST.SExpressionContainer $2 }
-        | Term          { LAST.STerm $1 }
+Exp     : Op TExp TExp   { LAST.SBinExpression $1 $2 $3 }
+        | Op TExp        { LAST.SUnExpression $1 $2 }
+        | Term           { LAST.STerm $1 }
 
-Op      : op            { LAST.SOperator $1 }
+Op      : op             { LAST.SOperator $1 }
 
-Term    : number        { LAST.SNumber $1 }
-        | text          { LAST.SText $1 }
+Term    : number         { LAST.SNumber $1 }
+        | text           { LAST.SText $1 }
 
 {
 parseError :: [LT.Token] -> a
