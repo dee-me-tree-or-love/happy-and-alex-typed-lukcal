@@ -1,12 +1,14 @@
 # Happy & Alex: Typed **Pol**ish Notation (**Łuk**asiewicz) **Cal**culator
 
+This is a home of the `pollukcal` language.
+
 > 🪄 This is a project for experimenting with
 > [Happy](https://haskell-happy.readthedocs.io/en/latest/) and
 > [Alex](https://haskell-alex.readthedocs.io/en/latest/).  
 > 🙃 This is a very simplistic language with no practical use intended,
 > but is certainly encouraged.
 
-This is a home of the `pollukcal` language.
+## What is `PolLukCal`?
 
 It is a Polish notation inspired language implementation
 using Happy and Alex Haskell libraries.
