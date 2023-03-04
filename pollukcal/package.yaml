@@ -35,6 +35,13 @@ ghc-options:
 
 library:
   source-dirs: src
+  dependencies:
+    - array
+    - base
+    - bytestring
+  build-tools:
+    - alex
+    - happy
 
 executables:
   pollukcal-exe:
