@@ -89,28 +89,31 @@ assignTypes = LTC.annotate
 -- | Checks the correctness of the typed expression
 --
 -- >>> checkTypes $ getAst $ getTokens "~~ Number (+ (+ 1 2))"
--- Right "Okay"
+-- Right "OK"
 --
 -- >>> checkTypes $ getAst $ getTokens "(+ (+ 1 2))"
--- Right "Okay"
+-- Right "OK"
 --
 -- >>> checkTypes $ getAst $ getTokens "(+ (+ cat mouse))"
--- Right "Okay"
+-- Right "OK"
 --
 -- >>> checkTypes $ getAst $ getTokens "~~ Number + cat mouse"
--- Left "Inferred type: STypeHint \"Text\", doesn't match specified: STypeHint \"Number\""
+-- Left "Inferred type: STypeHint \"Text\", does not match specified type: STypeHint \"Number\""
 --
 -- >>> checkTypes $ getAst $ getTokens "(~~ Number + cat mouse)"
--- Right "Okay"
+-- Left "Inferred type: STypeHint \"Text\", does not match specified type: STypeHint \"Number\""
+--
+-- >>> checkTypes $ getAst $ getTokens "~~ Text (~~ Number + cat mouse)"
+-- NOW Right "OK"
 --
 -- >>> checkTypes $ getAst $ getTokens "(+ (~~ Number + cat mouse))"
--- Right "Okay"
+-- Right "OK"
 --
 -- >>> checkTypes $ getAst $ getTokens "(+ (+ cat 2))"
--- Left "Specified failed type: STypeHint \"FAIL\""
+-- Left "Type inference failed: STypeHint \"FAIL\""
 
 -- >>> checkTypes $ getAst $ getTokens "~~ String (+ (+ 1 2))"
--- Left "Inferred type: STypeHint \"Number\", doesn't match specified: STypeHint \"String\""
+-- Left "Inferred type: STypeHint \"Number\", does not match specified type: STypeHint \"String\""
 --
 checkTypes :: LAST.TypedExpression -> Either String String
 checkTypes = LTC.check

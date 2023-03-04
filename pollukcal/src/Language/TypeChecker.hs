@@ -54,9 +54,29 @@ solve _ t1 t2
 
 -- FIXME: this works for only the top-level type hints.
 check :: LAST.TypedExpression -> TypeJudgement
-check (LAST.STypedExpression t e)
-    | t == failTypeHint = Left $ "Specified failed type: " ++ show t
-    | t == k && (k /= failTypeHint) = Right "Okay"
-    | otherwise = Left ("Inferred type: " ++ show k ++ ", doesn't match specified: " ++ show t)
-    where k = infer e
-check (LAST.SUntypedExpression e) = check $ annotate (LAST.SUntypedExpression e)
+check (LAST.STypedExpression t e) = resolve (Just t) k
+        where k = infer e
+check (LAST.SUntypedExpression e) = resolve (expand e) k
+        where k = infer e
+
+resolve :: Maybe LAST.TypeHint -> LAST.TypeHint -> TypeJudgement
+resolve Nothing x
+    | x == failTypeHint = Left $ "Type inference failed: " ++ show x
+    | otherwise = Right "OK"
+resolve (Just x) y
+    | x == failTypeHint = Left $ "Specified type failed: " ++ show x
+    | x == y = Right "OK"
+    | otherwise = Left $ "Inferred type: " ++ show y  ++ ", does not match specified type: " ++ show x
+
+expand :: LAST.Expression -> Maybe LAST.TypeHint
+expand (LAST.STerm _)                = Nothing
+expand (LAST.SExpressionContainer e) = extract e
+expand (LAST.SUnExpression _ e)      = extract e
+expand (LAST.SBinExpression o e f) = do
+    t <- extract e
+    k <- extract f
+    return $ solve o t k
+
+extract :: LAST.TypedExpression -> Maybe LAST.TypeHint
+extract (LAST.SUntypedExpression _) = Nothing
+extract (LAST.STypedExpression t _) = Just t
