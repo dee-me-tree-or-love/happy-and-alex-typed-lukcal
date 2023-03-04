@@ -43,22 +43,22 @@ getTokens = LL.scan
 -- SExpression (SBinExpression (SOperator '+') (SExpression (STerm (SNumber 1))) (SExpression (STerm (SNumber 2))))
 --
 -- >>> getAst $ getTokens "~~ Number + 1 2"
--- STypedExpression (STypeHint "Number") (SBinExpression (SOperator '+') (SExpression (STerm (SNumber 1))) (SExpression (STerm (SNumber 2))))
+-- STypedExpression (STypeHint "Number") (SExpression (SBinExpression (SOperator '+') (SExpression (STerm (SNumber 1))) (SExpression (STerm (SNumber 2)))))
 --
 -- >>> getAst $ getTokens "~~ Number + 1 (~~ Number - 1 2)"
--- STypedExpression (STypeHint "Number") (SBinExpression (SOperator '+') (SExpression (STerm (SNumber 1))) (SExpression (SExpressionContainer (STypedExpression (STypeHint "Number") (SBinExpression (SOperator '-') (SExpression (STerm (SNumber 1))) (SExpression (STerm (SNumber 2))))))))
+-- STypedExpression (STypeHint "Number") (SExpression (SBinExpression (SOperator '+') (SExpression (STerm (SNumber 1))) (STypedExpressionContainer (STypedExpression (STypeHint "Number") (SExpression (SBinExpression (SOperator '-') (SExpression (STerm (SNumber 1))) (SExpression (STerm (SNumber 2)))))))))
 --
 -- >>> getAst $ getTokens "(+ 1 2)"
--- SExpression (SExpressionContainer (SExpression (SBinExpression (SOperator '+') (SExpression (STerm (SNumber 1))) (SExpression (STerm (SNumber 2))))))
+-- STypedExpressionContainer (SExpression (SBinExpression (SOperator '+') (SExpression (STerm (SNumber 1))) (SExpression (STerm (SNumber 2)))))
 --
 -- >>> getAst $ getTokens "(+ 1)"
--- SExpression (SExpressionContainer (SExpression (SUnExpression (SOperator '+') (SExpression (STerm (SNumber 1))))))
+-- STypedExpressionContainer (SExpression (SUnExpression (SOperator '+') (SExpression (STerm (SNumber 1)))))
 --
 -- >>> getAst $ getTokens "(+ (+ 1 2))"
--- SExpression (SExpressionContainer (SExpression (SUnExpression (SOperator '+') (SExpression (SExpressionContainer (SExpression (SBinExpression (SOperator '+') (SExpression (STerm (SNumber 1))) (SExpression (STerm (SNumber 2))))))))))
+-- STypedExpressionContainer (SExpression (SUnExpression (SOperator '+') (STypedExpressionContainer (SExpression (SBinExpression (SOperator '+') (SExpression (STerm (SNumber 1))) (SExpression (STerm (SNumber 2))))))))
 --
 -- >>> getAst $ getTokens "~~ Number (+ (+ 1 2))"
--- STypedExpression (STypeHint "Number") (SExpressionContainer (SExpression (SUnExpression (SOperator '+') (SExpression (SExpressionContainer (SExpression (SBinExpression (SOperator '+') (SExpression (STerm (SNumber 1))) (SExpression (STerm (SNumber 2))))))))))
+-- STypedExpression (STypeHint "Number") (STypedExpressionContainer (SExpression (SUnExpression (SOperator '+') (STypedExpressionContainer (SExpression (SBinExpression (SOperator '+') (SExpression (STerm (SNumber 1))) (SExpression (STerm (SNumber 2)))))))))
 --
 getAst :: [LT.Token] -> LAST.TypedExpression
 getAst = LP.parse
@@ -89,31 +89,31 @@ inferType = LTC.infer
 -- | Checks the correctness of the typed expression
 --
 -- >>> checkTypes $ getAst $ getTokens "~~ Number (+ (+ 1 2))"
--- Left "fail"
+-- Right "Inferred type: STypeHint \"Number\", matches the specified type: STypeHint \"Number\""
 --
 -- >>> checkTypes $ getAst $ getTokens "(+ (+ 1 2))"
--- Left "fail"
+-- Right "Inferred type: STypeHint \"Number\" and Inferred type: STypeHint \"Number\""
 --
 -- >>> checkTypes $ getAst $ getTokens "(+ (+ cat mouse))"
--- Left "fail"
+-- Right "Inferred type: STypeHint \"Text\" and Inferred type: STypeHint \"Text\""
 --
 -- >>> checkTypes $ getAst $ getTokens "~~ Number + cat mouse"
--- Left "fail"
+-- Left "Inferred type: STypeHint \"Text\", does not match the specified type: STypeHint \"Number\""
 --
 -- >>> checkTypes $ getAst $ getTokens "(~~ Number + cat mouse)"
--- Left "fail"
+-- Left "Inferred type: STypeHint \"Text\", does not match the specified type: STypeHint \"Number\""
 --
 -- >>> checkTypes $ getAst $ getTokens "~~ Text (~~ Number + cat mouse)"
--- Left "fail"
+-- Right "Inferred type: STypeHint \"Text\", matches the specified type: STypeHint \"Text\""
 --
 -- >>> checkTypes $ getAst $ getTokens "(+ (~~ Number + cat mouse))"
--- Left "fail"
+-- Left "Inferred type: STypeHint \"Text\", does not match the specified type: STypeHint \"Number\""
 --
 -- >>> checkTypes $ getAst $ getTokens "(+ (+ cat 2))"
--- Left "fail"
+-- Right "Inferred type: STypeHint \"Text\" and Inferred type: STypeHint \"Number\""
 --
 -- >>> checkTypes $ getAst $ getTokens "~~ String (+ (+ 1 2))"
--- Left "fail"
+-- Left "Inferred type: STypeHint \"Number\", does not match the specified type: STypeHint \"String\""
 --
 checkTypes :: LAST.TypedExpression -> Either String String
 checkTypes = LTC.check

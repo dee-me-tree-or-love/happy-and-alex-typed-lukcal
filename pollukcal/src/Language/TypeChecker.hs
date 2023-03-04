@@ -41,9 +41,31 @@ solve _ t1 t2
     | t1 == t2 = t1
     | otherwise  = failTypeHint
 
--- Type checking
--- ~~~~~~~~~~~~~
 
--- FIXME: this works for only the top-level type hints.
+-- Type checking (naive)
+-- ~~~~~~~~~~~~~~~~~~~~~
+-- TODO: this should be optimized
+
+-- FIXME: this needs to be implemented monadically
 check :: LAST.TypedExpression -> TypeJudgement
-check _ = Left "fail"
+-- if type hint is provided -> infer and check equality
+check (LAST.STypedExpression t e)
+    | t == k = Right $ "Inferred type: " ++ show k ++ ", matches the specified type: " ++ show t
+    | otherwise = Left $ "Inferred type: " ++ show k ++ ", does not match the specified type: " ++ show t
+    where k = infer e
+-- if it is a container -> check nested
+check (LAST.STypedExpressionContainer e) = check e
+-- if no hints are provided -> check nested
+check (LAST.SExpression e) = check' e
+
+check' :: LAST.Expression -> TypeJudgement
+check' (LAST.STerm t)              = Right $ "Inferred type: " ++ show (derive t)
+check' (LAST.SUnExpression _ e)    = check e
+check' (LAST.SBinExpression _ e f) = resolve k l
+    where k = check e
+          l = check f
+
+resolve :: TypeJudgement -> TypeJudgement -> TypeJudgement
+resolve (Left x) _          = Left x
+resolve _ (Left x)          = Left x
+resolve (Right x) (Right y) = Right $ x ++ " and " ++ y
