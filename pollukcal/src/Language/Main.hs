@@ -46,19 +46,19 @@ getTokens = LL.scan
 -- STypedExpression (STypeHint "Number") (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (STerm (SNumber 2))))
 --
 -- >>> getAst $ getTokens "~~ Number + 1 (~~ Number - 1 2)"
--- STypedExpression (STypeHint "Number") (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))) (STypedExpressionContainer (STypedExpression (STypeHint "Number") (SBinExpression (SOperator '-') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (STerm (SNumber 2)))))))
+-- STypedExpression (STypeHint "Number") (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (SExpressionContainer (STypedExpression (STypeHint "Number") (SBinExpression (SOperator '-') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (STerm (SNumber 2))))))))
 --
 -- >>> getAst $ getTokens "(+ 1 2)"
--- SUntypedExpression (SExpressionContainer (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (STerm (SNumber 2)))))
+-- SUntypedExpression (SExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (STerm (SNumber 2))))))
 --
 -- >>> getAst $ getTokens "(+ 1)"
--- SUntypedExpression (SExpressionContainer (SUnExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1)))))
+-- SUntypedExpression (SExpressionContainer (SUntypedExpression (SUnExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))))))
 --
 -- >>> getAst $ getTokens "(+ (+ 1 2))"
--- SUntypedExpression (SExpressionContainer (SUnExpression (SOperator '+') (SUntypedExpression (SExpressionContainer (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (STerm (SNumber 2))))))))
+-- SUntypedExpression (SExpressionContainer (SUntypedExpression (SUnExpression (SOperator '+') (SUntypedExpression (SExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (STerm (SNumber 2))))))))))
 --
 -- >>> getAst $ getTokens "~~ Number (+ (+ 1 2))"
--- STypedExpression (STypeHint "Number") (SExpressionContainer (SUnExpression (SOperator '+') (SUntypedExpression (SExpressionContainer (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (STerm (SNumber 2))))))))
+-- STypedExpression (STypeHint "Number") (SExpressionContainer (SUntypedExpression (SUnExpression (SOperator '+') (SUntypedExpression (SExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (STerm (SNumber 2))))))))))
 --
 getAst :: [LT.Token] -> LAST.TypedExpression
 getAst = LP.parse
@@ -66,22 +66,22 @@ getAst = LP.parse
 -- | Assigns expression types.
 --
 -- >>> assignTypes $ getAst $ getTokens "~~ Number (+ (+ 1 2))"
--- STypedExpression (STypeHint "Number") (STypedExpressionContainer (SUntypedExpression (SUnExpression (SOperator '+') (STypedExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (STerm (SNumber 2)))))))))
+-- STypedExpression (STypeHint "Number") (SExpressionContainer (SUntypedExpression (SUnExpression (SOperator '+') (SUntypedExpression (SExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (STerm (SNumber 2))))))))))
 --
 -- >>> assignTypes $ getAst $ getTokens "(+ (+ 1 2))"
--- STypedExpression (STypeHint "Number") (SUntypedExpression (SUnExpression (SOperator '+') (STypedExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (STerm (SNumber 2))))))))
+-- STypedExpression (STypeHint "Number") (SExpressionContainer (SUntypedExpression (SUnExpression (SOperator '+') (SUntypedExpression (SExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SNumber 1))) (SUntypedExpression (STerm (SNumber 2))))))))))
 --
 -- >>> assignTypes $ getAst $ getTokens "(+ (+ cat (+ flower grass)))"
--- STypedExpression (STypeHint "Text") (SUntypedExpression (SUnExpression (SOperator '+') (STypedExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SText "cat"))) (STypedExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SText "flower"))) (SUntypedExpression (STerm (SText "grass")))))))))))
+-- STypedExpression (STypeHint "Text") (SExpressionContainer (SUntypedExpression (SUnExpression (SOperator '+') (SUntypedExpression (SExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SText "cat"))) (SUntypedExpression (SExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SText "flower"))) (SUntypedExpression (STerm (SText "grass"))))))))))))))
 --
 -- >>> assignTypes $ getAst $ getTokens "(+ (~~ Number + cat mouse))"
--- STypedExpression (STypeHint "Text") (SUntypedExpression (SUnExpression (SOperator '+') (STypedExpressionContainer (STypedExpression (STypeHint "Number") (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SText "cat"))) (SUntypedExpression (STerm (SText "mouse")))))))))
+-- STypedExpression (STypeHint "Text") (SExpressionContainer (SUntypedExpression (SUnExpression (SOperator '+') (SUntypedExpression (SExpressionContainer (STypedExpression (STypeHint "Number") (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SText "cat"))) (SUntypedExpression (STerm (SText "mouse"))))))))))
 --
 -- >>> assignTypes $ getAst $ getTokens "(+ (+ mouse bread))"
--- STypedExpression (STypeHint "Text") (SUntypedExpression (SUnExpression (SOperator '+') (STypedExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SText "mouse"))) (SUntypedExpression (STerm (SText "bread"))))))))
+-- STypedExpression (STypeHint "Text") (SExpressionContainer (SUntypedExpression (SUnExpression (SOperator '+') (SUntypedExpression (SExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SText "mouse"))) (SUntypedExpression (STerm (SText "bread"))))))))))
 --
 -- >>> assignTypes $ getAst $ getTokens "(+ (+ cat 2))"
--- STypedExpression (STypeHint "FAIL") (SUntypedExpression (SUnExpression (SOperator '+') (STypedExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SText "cat"))) (SUntypedExpression (STerm (SNumber 2))))))))
+-- STypedExpression (STypeHint "FAIL") (SExpressionContainer (SUntypedExpression (SUnExpression (SOperator '+') (SUntypedExpression (SExpressionContainer (SUntypedExpression (SBinExpression (SOperator '+') (SUntypedExpression (STerm (SText "cat"))) (SUntypedExpression (STerm (SNumber 2))))))))))
 --
 assignTypes :: LAST.TypedExpression -> LAST.TypedExpression
 assignTypes = LTC.annotate
@@ -97,11 +97,17 @@ assignTypes = LTC.annotate
 -- >>> checkTypes $ getAst $ getTokens "(+ (+ cat mouse))"
 -- Right "Okay"
 --
+-- >>> checkTypes $ getAst $ getTokens "~~ Number + cat mouse"
+-- Left "Inferred type: STypeHint \"Text\", doesn't match specified: STypeHint \"Number\""
+--
+-- >>> checkTypes $ getAst $ getTokens "(~~ Number + cat mouse)"
+-- Right "Okay"
+--
 -- >>> checkTypes $ getAst $ getTokens "(+ (~~ Number + cat mouse))"
 -- Right "Okay"
 --
 -- >>> checkTypes $ getAst $ getTokens "(+ (+ cat 2))"
--- Left "Inferred type: STypeHint \"FAIL\""
+-- Left "Specified failed type: STypeHint \"FAIL\""
 
 -- >>> checkTypes $ getAst $ getTokens "~~ String (+ (+ 1 2))"
 -- Left "Inferred type: STypeHint \"Number\", doesn't match specified: STypeHint \"String\""

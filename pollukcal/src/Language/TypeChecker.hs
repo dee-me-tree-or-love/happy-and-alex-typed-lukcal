@@ -24,19 +24,18 @@ type TypeJudgement = Either String String
 -- TODO: make use of Functors & Monads
 
 annotate :: LAST.TypedExpression -> LAST.TypedExpression
-annotate (LAST.STypedExpressionContainer x) = annotate x
 annotate (LAST.STypedExpression t x) = LAST.STypedExpression t x
-annotate (LAST.SUntypedExpression x) = LAST.STypedExpression t $ LAST.SUntypedExpression x
+annotate (LAST.SUntypedExpression x) = LAST.STypedExpression t x
     where t = infer x
 
 -- TODO: replace with monadic unwrap?
 untype :: LAST.TypedExpression -> LAST.Expression
-untype (LAST.SUntypedExpression x)        = x
-untype (LAST.STypedExpression _ x)        = untype x
-untype (LAST.STypedExpressionContainer x) = untype x
+untype (LAST.SUntypedExpression x) = x
+untype (LAST.STypedExpression _ x) = x
 
 infer :: LAST.Expression -> LAST.TypeHint
 infer (LAST.STerm t)                = derive t
+infer (LAST.SExpressionContainer e) = infer $ untype e
 infer (LAST.SUnExpression _ e)      = infer $ untype e
 infer (LAST.SBinExpression o e1 e2) = solve o (infer $ untype e1) (infer $ untype e2)
 
@@ -59,9 +58,5 @@ check (LAST.STypedExpression t e)
     | t == failTypeHint = Left $ "Specified failed type: " ++ show t
     | t == k && (k /= failTypeHint) = Right "Okay"
     | otherwise = Left ("Inferred type: " ++ show k ++ ", doesn't match specified: " ++ show t)
-    where k = infer $ untype e
-check (LAST.SUntypedExpression e)
-    | failTypeHint == k = Left ("Inferred type: " ++ show k)
-    | otherwise = Right "Okay"
     where k = infer e
-check (LAST.STypedExpressionContainer e) = check e
+check (LAST.SUntypedExpression e) = check $ annotate (LAST.SUntypedExpression e)
