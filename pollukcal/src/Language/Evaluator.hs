@@ -12,8 +12,9 @@ data EvalResult
 type EvalOutput = Either String EvalResult
 
 eval :: LAST.TypedExpression -> EvalOutput
-eval (LAST.SUntypedExpression x) = compute x
-eval (LAST.STypedExpression _ x) = compute x
+eval (LAST.SExpression x)        = compute x
+eval (LAST.STypedExpressionContainer x) = eval x
+eval (LAST.STypedExpression _ x)        = eval x
 
 -- Computing the expressions
 -- ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,8 +22,6 @@ eval (LAST.STypedExpression _ x) = compute x
 compute :: LAST.Expression -> EvalOutput
 -- leaf
 compute (LAST.STerm t)                = get t
--- wrapped expression
-compute (LAST.SExpressionContainer e) = eval e
 -- unary expression
 compute (LAST.SUnExpression o e)      = sApply o $ eval e
 -- binary expression

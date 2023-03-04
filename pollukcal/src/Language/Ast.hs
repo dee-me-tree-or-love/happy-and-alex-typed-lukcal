@@ -8,8 +8,9 @@ module Language.Ast
 where
 
 data TypedExpression
-  = STypedExpression TypeHint Expression
-  | SUntypedExpression Expression
+  = STypedExpression TypeHint TypedExpression
+  | STypedExpressionContainer TypedExpression
+  | SExpression Expression
   deriving (Eq, Show)
 
 newtype TypeHint
@@ -19,7 +20,6 @@ newtype TypeHint
 data Expression
   = SBinExpression Operator TypedExpression TypedExpression
   | SUnExpression Operator TypedExpression
-  | SExpressionContainer TypedExpression
   | STerm Term
   deriving (Eq, Show)
 
