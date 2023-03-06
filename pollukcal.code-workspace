@@ -1,0 +1,15 @@
+{
+  "folders": [
+    {
+      "name": "Main",
+      "path": "."
+    },
+    {
+      "name": "PolLukCal (HS)",
+      "path": "./pollukcal"
+    }
+  ],
+  "settings": {
+    "haskell.formattingProvider": "stylish-haskell"
+  }
+}

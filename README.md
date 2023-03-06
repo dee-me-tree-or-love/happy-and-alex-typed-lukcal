@@ -1,4 +1,6 @@
-# Happy & Alex: Typed **Pol**ish Notation (**Łuk**asiewicz) **Cal**culator
+# Happy & Alex: Typed `Pol`ish Notation (`Łuk`asiewicz) `Cal`culator
+
+This is a home of the `pollukcal` language.
 
 > 🪄 This is a project for experimenting with
 > [Happy](https://haskell-happy.readthedocs.io/en/latest/) and
@@ -6,7 +8,7 @@
 > 🙃 This is a very simplistic language with no practical use intended,
 > but is certainly encouraged.
 
-This is a home of the `pollukcal` language.
+## What is `PolLukCal`?
 
 It is a Polish notation inspired language implementation
 using Happy and Alex Haskell libraries.
@@ -16,12 +18,12 @@ using Happy and Alex Haskell libraries.
 -- This is a comment
 
 -- This is a valid pollukcal expression:
-~~ Number (+ 1 2)
+~~ Number + 1 2
 -- Evaluating which will produce: Right (NumberResult 3)
 
 -- This is a valid pollukcal expression too:
-~~ Number (+ cat mouse)
--- Evaluating which will produce: Right (TextResult catmouse)
+~~ Text + cup cake
+-- Evaluating which will produce: Right (TextResult "cupcake")
 ```
 
 <!-- markdownlint-disable MD033 -->
@@ -58,6 +60,8 @@ number        = 1*DIGIT ; any natural (with zero)
 > - [x] type hints
 > - [ ] flexible operator arity
 >
+> 💡 Detailed implementation of the supported syntax is
+> in [`./pollukcal/src/Language/Parser.y`](./pollukcal/src/Language/Parser.y)
 
 ## Implementation
 
@@ -67,30 +71,48 @@ The `pollukcal` toolkit is implemented using Haskell in [`./pollukcal/`](./pollu
 
 ```bash
 $ cd pollukcal && stack install && cd ..
-$ pollukcal --version
-0.1.0 # or something similar?
+$ pollukcal-cli --help
+The pollukcal program
+
+pollukcal [COMMAND] ... [OPTIONS]
+
+Common flags:
+  -c --checktypes=ITEM
+  -i --infertypes=ITEM
+  -? --help             Display help message
+  -V --version          Print version information
+
+pollukcal exec [OPTIONS]
+
+  -e --eval=ITEM        Expression to evaluate
+
+pollukcal file [OPTIONS]
+
+  -e --eval=FILE        File to evaluate
 ```
 
 ### Toolkit usage
 
+> 🏗️ NB: the toolkit is still in development, so the output is not the best,
+> all suggestions are very welcome!
+
 #### Evaluation
 
 ```bash
-$ pollukcal act --eval pollukcal-demo.pol
-Right (NumberResult 3)
-Right (TextResult catmouse)
+$ pollukcal-cli exec --eval "~~ Text + cup cake"
+"Right (TextResult \"cupcake\")"
+```
+
+#### Type inference
+
+```bash
+$ pollukcal-cli exec --infer "~~ Text + cup cake"
+"Just (STypeHint \"Text\")"
 ```
 
 #### Type checking
 
 ```bash
-$ pollukcal act --type-check pollukcal-demo.pol
-Right "OK"
-```
-
-#### Exploration
-
-```bash
-$ pollukcal act --ast pollukcal-demo.pol
--- TODO: implement the AST output
+$ pollukcal-cli exec --check "~~ Text + cup cake"
+"Right (Just (STypeHint \"Text\"),\"Inferred type is: Just (STypeHint \\\"Text\\\"), specified: Just (STypeHint \\\"Text\\\")\")"
 ```
