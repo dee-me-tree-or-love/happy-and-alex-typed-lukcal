@@ -12,9 +12,8 @@ data EvalResult
 type EvalOutput = Either String EvalResult
 
 eval :: LAST.TypedExpression -> EvalOutput
-eval (LAST.SExpression x)        = compute x
 eval (LAST.STypedExpressionContainer x) = eval x
-eval (LAST.STypedExpression _ x)        = eval x
+eval (LAST.STypedExpression _ x)        = compute x
 
 -- Computing the expressions
 -- ~~~~~~~~~~~~~~~~~~~~~~~~~

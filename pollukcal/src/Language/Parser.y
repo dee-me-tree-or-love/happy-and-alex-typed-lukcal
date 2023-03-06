@@ -22,9 +22,9 @@ import qualified Language.Lexer as LL
 -- Grammar rules
 %%
 
-TExp    : thi TH TExp    { LAST.STypedExpression $2 $3 }
+TExp    : thi TH Exp    { LAST.STypedExpression (Just $2) $3 }
+        | Exp            { LAST.STypedExpression Nothing $1 }
         | '(' TExp ')'   { LAST.STypedExpressionContainer $2 }
-        | Exp            { LAST.SExpression $1 }
 
 TH      : text           { LAST.STypeHint $1 }
 

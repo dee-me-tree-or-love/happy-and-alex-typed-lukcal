@@ -1,25 +1,34 @@
 module Language.Ast
-  ( TypedExpression (..),
+  ( GTypedExpression (..),
+    GExpression (..),
     TypeHint (..),
-    Expression (..),
     Operator (..),
     Term (..),
+    TypedExpression,
+    AnnotatedTypedExpression,
+    Expression,
+    AnnotatedExpression,
   )
 where
 
-data TypedExpression
-  = STypedExpression TypeHint TypedExpression
-  | STypedExpressionContainer TypedExpression
-  | SExpression Expression
+type TypedExpression = GTypedExpression (Maybe TypeHint)
+type AnnotatedTypedExpression = GTypedExpression (Maybe TypeHint, Maybe TypeHint)
+
+type Expression = GExpression TypedExpression
+type AnnotatedExpression = GExpression AnnotatedTypedExpression
+
+data GTypedExpression a
+  = STypedExpression a (GExpression (GTypedExpression a))
+  | STypedExpressionContainer (GTypedExpression a)
   deriving (Eq, Show)
 
 newtype TypeHint
   = STypeHint String
   deriving (Eq, Show)
 
-data Expression
-  = SBinExpression Operator TypedExpression TypedExpression
-  | SUnExpression Operator TypedExpression
+data GExpression e
+  = SBinExpression Operator e e
+  | SUnExpression Operator e
   | STerm Term
   deriving (Eq, Show)
 
