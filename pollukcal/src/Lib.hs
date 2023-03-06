@@ -1,6 +1,8 @@
 module Lib
-    ( someFunc
+    ( cli
     ) where
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+import qualified CLI.Main as CM
+
+cli :: IO ()
+cli = CM.main

@@ -23,7 +23,4 @@ module Language.Readme () where
         - [x] Type inference
         - [x] Type checking
         - [x] Evaluation
-        - [x] Nested type expression syntax
-        - [x] Nested type expression evaluation
-        - [ ] Nested type expression type checking
  -}

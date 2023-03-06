@@ -36,6 +36,7 @@ ghc-options:
 library:
   source-dirs: src
   dependencies:
+    - cmdargs
     - array
     - base
     - bytestring
@@ -44,7 +45,7 @@ library:
     - happy
 
 executables:
-  pollukcal-exe:
+  pollukcal-cli:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
