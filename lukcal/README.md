@@ -95,7 +95,7 @@ $ stack run -- exec --check "~~ Text + 1 (+ 1 2)"
 ### 📦 `stack install` - to make *LukCal* available globally
 
 > After this, all examples in
-> [section above](#stack-run----arguments---executes-a-freshly-built-project)
+> [section above](#-stack-run----arguments---executes-a-freshly-built-project)
 > can replace `stack run --` with `lukcal-cli`
 
 #### 🧰 `lukcal-cli` is available locally after installing
