@@ -1,27 +1,27 @@
-# pollukcal
+# lukcal
 
-The Haskell-based toolkit for *PolLukCal* language.
+The Haskell-based toolkit for *LukCal* language.
 
 ## Setup
 
-- [`./app`](./app/) - Defines the executable `pollukcal`
-- [`./src`](./src/) - Defines the library/backend for `pollukcal`
+- [`./app`](./app/) - Defines the executable `lukcal`
+- [`./src`](./src/) - Defines the library/backend for `lukcal`
   - [`./src/CLI`](./src/CLI/) - Defines the CLI interface and handling
-  - [`./src/Language`](./src/Language/) - Defines the *PolLukCal* language tooling
+  - [`./src/Language`](./src/Language/) - Defines the *LukCal* language tooling
 
 ## Development
 
-### `stack build` - builds the project
+### 🚚 `stack build` - builds the project
 
-### `stack run -- [Arguments]` - executes a freshly built project
+### 💨 `stack run -- [Arguments]` - executes a freshly built project
 
 #### Getting help
 
 ```bash
 $ stack run -- --help
-The pollukcal program
+The lukcal program
 
-pollukcal [COMMAND] ... [OPTIONS]
+lukcal [COMMAND] ... [OPTIONS]
 
 Common flags:
   -c --checktypes=ITEM
@@ -29,11 +29,11 @@ Common flags:
   -? --help             Display help message
   -V --version          Print version information
 
-pollukcal exec [OPTIONS]
+lukcal exec [OPTIONS]
 
   -e --eval=ITEM        Expression to evaluate
 
-pollukcal file [OPTIONS]
+lukcal file [OPTIONS]
 
   -e --eval=FILE        File to evaluate
 ```
@@ -92,19 +92,21 @@ $ stack run -- exec --check "~~ Text + 1 (+ 1 2)"
 "Left (Nothing,\"Inferred type is: Just (STypeHint \\\"Number\\\"), specified: Just (STypeHint \\\"Text\\\")\")"
 ```
 
-### `stack install` - to make `pollukcal-cli` available globally
+### 📦 `stack install` - to make *LukCal* available globally
 
 > After this, all examples in
 > [section above](#stack-run----arguments---executes-a-freshly-built-project)
-> can replace `stack run --` with `pollukcal-cli`
+> can replace `stack run --` with `lukcal-cli`
+
+#### 🧰 `lukcal-cli` is available locally after installing
 
 ```bash
-$ pollukcal-cli exec --eval "+ cup cake"
+$ lukcal-cli exec --eval "+ cup cake"
 "Right (TextResult \"cupcake\")"
 
-$ pollukcal-cli exec --infer "+ 1 (+ 1 2)"
+$ lukcal-cli exec --infer "+ 1 (+ 1 2)"
 "Just (STypeHint \"Number\")"
 
-$ pollukcal-cli exec --check "~~ Text + 1 cake"
+$ lukcal-cli exec --check "~~ Text + 1 cake"
 "Left (Nothing,\"Inferred type is: Nothing, specified: Just (STypeHint \\\"Text\\\")\")"
 ```

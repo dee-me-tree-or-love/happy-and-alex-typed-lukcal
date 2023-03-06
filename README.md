@@ -1,6 +1,6 @@
 # Happy & Alex: Typed `Pol`ish Notation (`Łuk`asiewicz) `Cal`culator
 
-This is a home of the `pollukcal` language.
+This is a home of the `lukcal` language.
 
 > 🪄 This is a project for experimenting with
 > [Happy](https://haskell-happy.readthedocs.io/en/latest/) and
@@ -8,20 +8,15 @@ This is a home of the `pollukcal` language.
 > 🙃 This is a very simplistic language with no practical use intended,
 > but is certainly encouraged.
 
-## What is `PolLukCal`?
+## What is `LukCal`?
 
 It is a Polish notation inspired language implementation
 using Happy and Alex Haskell libraries.
 
 ```haskell
--- #file: pollukcal-demo.pol
--- This is a comment
-
--- This is a valid pollukcal expression:
 ~~ Number + 1 2
 -- Evaluating which will produce: Right (NumberResult 3)
 
--- This is a valid pollukcal expression too:
 ~~ Text + cup cake
 -- Evaluating which will produce: Right (TextResult "cupcake")
 ```
@@ -39,7 +34,7 @@ using Happy and Alex Haskell libraries.
 
 ## Language syntax
 
-On a high-level, `pollukcal` is a language supporting a prefix-form binary and unary expressions, with optional type hints:
+On a high-level, `lukcal` is a language supporting a prefix-form binary and unary expressions, with optional type hints:
 
 ```abnf title="High-level language syntax"
 PROGRAM       = *(comment / expression)
@@ -61,20 +56,20 @@ number        = 1*DIGIT ; any natural (with zero)
 > - [ ] flexible operator arity
 >
 > 💡 Detailed implementation of the supported syntax is
-> in [`./pollukcal/src/Language/Parser.y`](./pollukcal/src/Language/Parser.y)
+> in [`./lukcal/src/Language/Parser.y`](./lukcal/src/Language/Parser.y)
 
 ## Implementation
 
-The `pollukcal` toolkit is implemented using Haskell in [`./pollukcal/`](./pollukcal/).
+The `lukcal` toolkit is implemented using Haskell in [`./lukcal/`](./lukcal/).
 
 ### Installing
 
 ```bash
-$ cd pollukcal && stack install && cd ..
-$ pollukcal-cli --help
-The pollukcal program
+$ cd lukcal && stack install && cd ..
+$ lukcal-cli --help
+The lukcal program
 
-pollukcal [COMMAND] ... [OPTIONS]
+lukcal [COMMAND] ... [OPTIONS]
 
 Common flags:
   -c --checktypes=ITEM
@@ -82,11 +77,11 @@ Common flags:
   -? --help             Display help message
   -V --version          Print version information
 
-pollukcal exec [OPTIONS]
+lukcal exec [OPTIONS]
 
   -e --eval=ITEM        Expression to evaluate
 
-pollukcal file [OPTIONS]
+lukcal file [OPTIONS]
 
   -e --eval=FILE        File to evaluate
 ```
@@ -99,20 +94,20 @@ pollukcal file [OPTIONS]
 #### Evaluation
 
 ```bash
-$ pollukcal-cli exec --eval "~~ Text + cup cake"
+$ lukcal-cli exec --eval "~~ Text + cup cake"
 "Right (TextResult \"cupcake\")"
 ```
 
 #### Type inference
 
 ```bash
-$ pollukcal-cli exec --infer "~~ Text + cup cake"
+$ lukcal-cli exec --infer "~~ Text + cup cake"
 "Just (STypeHint \"Text\")"
 ```
 
 #### Type checking
 
 ```bash
-$ pollukcal-cli exec --check "~~ Text + cup cake"
+$ lukcal-cli exec --check "~~ Text + cup cake"
 "Right (Just (STypeHint \"Text\"),\"Inferred type is: Just (STypeHint \\\"Text\\\"), specified: Just (STypeHint \\\"Text\\\")\")"
 ```

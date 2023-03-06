@@ -5,8 +5,8 @@
       "path": "."
     },
     {
-      "name": "PolLukCal (HS)",
-      "path": "./pollukcal"
+      "name": "LukCal (HS)",
+      "path": "./lukcal"
     }
   ],
   "settings": {

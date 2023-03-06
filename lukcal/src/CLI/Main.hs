@@ -7,14 +7,14 @@ import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
                                          help, modes, typFile, (&=))
 
 
-data PolLukCal = Exec {eval :: String,checkTypes :: String,inferTypes :: String}
+data LukCal = Exec {eval :: String,checkTypes :: String,inferTypes :: String}
     | File {eval :: String,checkTypes :: String,inferTypes :: String}
      deriving (Show, Data, Typeable)
 
 expressionHint :: String
 expressionHint = "Expression to evaluate"
 
-exec :: PolLukCal
+exec :: LukCal
 exec = Exec {
         eval = def &= help expressionHint,
         checkTypes = def &= help expressionHint,
@@ -24,7 +24,7 @@ exec = Exec {
 fileHint :: String
 fileHint = "File to evaluate"
 
-file :: PolLukCal
+file :: LukCal
 file = File {
         eval = def &= help fileHint &= typFile,
         checkTypes = def &= help fileHint &= typFile,
@@ -36,7 +36,7 @@ file = File {
 -- - [ ] Prettier output
 -- - [ ] Exit codes
 
-handle :: PolLukCal -> String
+handle :: LukCal -> String
 handle Exec {eval = pIn, checkTypes = "", inferTypes = ""} = show $ LM.evalExpression . LM.stringToAst $ pIn
 handle Exec {eval = "", checkTypes = pIn, inferTypes = ""} = show $ LM.checkTypes . LM.annotateAst . LM.stringToAst $ pIn
 handle Exec {eval = "", checkTypes = "", inferTypes = pIn} = show $ LM.inferType . LM.stringToAst $ pIn

@@ -3,12 +3,12 @@ module CLI.Readme () where
 
 {- 
     This module contains all the utilities required for
-    implementing the PolLukCal CLI application.
+    implementing the LukCal CLI application.
 
-    PolLukCal is a basic (non-practical) calculator language inspired on Polish notation.
+    LukCal is a basic (non-practical) calculator language inspired on Polish notation.
 
     Contents:
-        - [ ] Main.hs - the core of the PolLukCal CLI app
+        - [ ] Main.hs - the core of the LukCal CLI app
 
     Features:
         - STDIN/Argument input

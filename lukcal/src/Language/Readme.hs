@@ -2,9 +2,9 @@ module Language.Readme () where
 
 {- 
     This module contains all the utilities required for
-    interpreting the Typed PolLukCal syntax.
+    interpreting the Typed LukCal syntax.
 
-    PolLukCal is a basic (non-practical) calculator language inspired on Polish notation.
+    LukCal is a basic (non-practical) calculator language inspired on Polish notation.
 
     Contents:
         - [x] Main.hs           - the core of the Simple Polcal module

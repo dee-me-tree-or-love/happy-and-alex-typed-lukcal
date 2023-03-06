@@ -1,10 +1,10 @@
-name:                pollukcal
+name:                lukcal
 version:             0.1.0.0
-github:              "githubuser/pollukcal"
+github:              "dee-me-tree-or-love/happy-and-alex-typed-lukcal"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2023 Author name here"
+author:              "D O"
+maintainer:          "dee-me-tree-or-love"
+copyright:           "2023 D O"
 
 extra-source-files:
 - README.md
@@ -12,12 +12,12 @@ extra-source-files:
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
-# category:            Web
+# category:            CLI
 
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/pollukcal#readme>
+description:         Please see the README on GitHub at <https://github.com/dee-me-tree-or-love/happy-and-alex-typed-lukcal#readme>
 
 dependencies:
 - base >= 4.7 && < 5
@@ -45,7 +45,7 @@ library:
     - happy
 
 executables:
-  pollukcal-cli:
+  lukcal-cli:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -53,10 +53,10 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - pollukcal
+    - lukcal
 
 tests:
-  pollukcal-test:
+  lukcal-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -64,4 +64,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - pollukcal
+    - lukcal
