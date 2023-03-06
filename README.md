@@ -1,4 +1,4 @@
-# Happy & Alex: Typed `Pol`ish Notation (`Łuk`asiewicz) `Cal`culator
+# Happy & Alex: Typed Polish Notation (`Łuk`asiewicz) `Cal`culator
 
 This is a home of the `lukcal` language.
 
