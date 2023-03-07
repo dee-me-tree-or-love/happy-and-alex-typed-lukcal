@@ -7,13 +7,13 @@ module Language.Readme () where
     LukCal is a basic (non-practical) calculator language inspired on Polish notation.
 
     Contents:
-        - [x] Main.hs           - the core of the Simple Polcal module
-        - [x] Lexer.x           - to tokenize the raw Polcal input
-        - [x] Tokens.hs         - defining all the lexemes for Polcal
-        - [x] Ast.hs            - defining the syntax tree constructs for Polcal
-        - [x] Parser.y          - to parse the tokenized Polcal input into an AST
-        - [x] TypeChecker.hs    - to faciliate the type checking of simple Polcal expressions
-        - [x] Evaluator.hs      - to evaluate the Polcal expressions
+        - [x] Main.hs           - the core of the Simple LukCal module
+        - [x] Lexer.x           - to tokenize the raw LukCal input
+        - [x] Tokens.hs         - defining all the lexemes for LukCal
+        - [x] Ast.hs            - defining the syntax tree constructs for LukCal
+        - [x] Parser.y          - to parse the tokenized LukCal input into an AST
+        - [x] TypeChecker.hs    - to faciliate the type checking of simple LukCal expressions
+        - [x] Evaluator.hs      - to evaluate the LukCal expressions
 
     Features:
         - [x] Basic lexing
