@@ -32,7 +32,7 @@ using Happy and Alex Haskell libraries.
 
 </details>
 
-## Language syntax
+### Language syntax
 
 On a high-level, `lukcal` is a language supporting a prefix-form binary and unary expressions, with optional type hints:
 
@@ -57,6 +57,34 @@ number        = 1*DIGIT ; any natural (with zero)
 >
 > 💡 Detailed implementation of the supported syntax is
 > in [`./lukcal/src/Language/Parser.y`](./lukcal/src/Language/Parser.y)
+
+### Examples
+
+```haskell
+-- 👀 Expressions in LukCal do not require type hints:
++ 1 (+ 2 (+ 3 4))
+-- =={eval}== Right (NumberResult 10)
+
+-- 👌 But you can add them if you would like:
+~~ Number + 1 (+ 2 (~~ Number + 3 4))
+-- =={type check}== Right (Just (STypeHint "Number"), "Inferred type is: ...")
+-- =={eval}== Right (NumberResult 10)
+
+-- 🤲 The type system of LukCal allows operations only on identical types:
+~~ Text + chocolate (~~ Text + cup cake)
+-- =={type check}== Right (Just (STypeHint "Text"), "Inferred type is: ...")
+-- =={eval}== Right (TextResult "chocolatecupcake")
+
+-- 😨 And if the types are not respected, LukCal will not compute the result
++ 1 cake
+-- =={type check}== Left (Nothing, "Inferred type is: Nothing, specified: Nothing")
+-- =={eval}== Left "Unsupported operator: +, for inputs: Right (NumberResult 1), and Right (TextResult "cup")"
+```
+
+> 💡 Detailed implementation of the evaluation is
+> in [`./lukcal/src/Language/Evaluator.hs`](./lukcal/src/Language/Evaluator.hs)
+> and type checking in
+> [`./lukcal/src/Language/TypeChecker.hs`](./lukcal/src/Language/TypeChecker.hs)
 
 ## Implementation
 
@@ -88,8 +116,8 @@ lukcal file [OPTIONS]
 
 ### Toolkit usage
 
-> 🏗️ NB: the toolkit is still in development, so the output is not the best,
-> all suggestions are very welcome!
+> 🏗️ NB: the toolkit is still in development, so the output may not be the most
+> readable, and all suggestions are very welcome!
 
 #### Evaluation
 
